@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Дымная вишня — вейп-шоп, Красных Партизан 469</title>
+  <meta name="description" content="Дымная вишня, Краснодар, улица Красных Партизан, 469. Прайс жидкостей: поиск по вкусу, цена и наличие.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='24' cy='40' r='14' fill='%23e23b5a'/%3E%3Ccircle cx='42' cy='42' r='14' fill='%239d1230'/%3E%3Cpath d='M32 8c0 14-8 18-14 22' fill='none' stroke='%23f3d2c3' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="smoke" aria-hidden="true"></canvas>
+  <div class="petals" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <header class="top">
+    <a class="mark" href="#top">Дымная вишня</a>
+    <nav>
+      <a href="#shelf">Прайс</a>
+      <a href="#visit">Адрес</a>
+    </nav>
+    <span class="age">18+</span>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Вейп-шоп · Краснодар</p>
+        <h1><span>Дымная</span> <em>вишня</em></h1>
+        <p class="lead">Улица Красных Партизан, 469. Полный прайс на полке: вкус, цена и сколько осталось.</p>
+      </div>
+      <div class="cherry" aria-hidden="true">
+        <svg viewBox="0 0 280 380">
+          <path class="stem" d="M146 18 C148 78 112 108 86 142" fill="none" stroke="#f3d2c3" stroke-width="2.4"/>
+          <path class="stem delay" d="M146 18 C150 82 188 112 214 146" fill="none" stroke="#f3d2c3" stroke-width="2.4"/>
+          <ellipse cx="168" cy="36" rx="34" ry="13" fill="#6e1832" transform="rotate(28 168 36)"/>
+          <ellipse cx="176" cy="32" rx="16" ry="6" fill="#c45a78" opacity=".7" transform="rotate(28 176 32)"/>
+          <circle cx="88" cy="196" r="62" fill="#c4183a"/>
+          <circle cx="196" cy="208" r="68" fill="#8e102c"/>
+          <ellipse cx="68" cy="176" rx="18" ry="12" fill="#ffb3c2" opacity=".55"/>
+          <ellipse cx="174" cy="186" rx="16" ry="11" fill="#ffb3c2" opacity=".28"/>
+          <circle class="drop" cx="86" cy="268" r="4" fill="#e23b5a"/>
+        </svg>
+      </div>
+    </section>
+
+    <div class="dock" id="dock">
+      <form class="finder" id="finder" role="search">
+        <label class="sr" for="q">Поиск по прайсу</label>
+        <input id="q" name="q" type="search" placeholder="вишня" autocomplete="off" enterkeyhint="search" spellcheck="false">
+        <button type="submit">Найти</button>
+      </form>
+      <button class="stock" id="stock" type="button" aria-pressed="false">Только в наличии</button>
+    </div>
+
+    <section class="shelf" id="shelf">
+      <div class="shelf-head">
+        <div>
+          <p class="eyebrow">Прайс</p>
+          <h2>Полка.</h2>
+        </div>
+        <label class="sort">Сортировка
+          <select id="sort">
+            <option value="sheet">Как в прайсе</option>
+            <option value="price">Сначала дешевле</option>
+            <option value="price-desc">Сначала дороже</option>
+            <option value="name">По названию</option>
+          </select>
+        </label>
+      </div>
+      <div class="chips" id="chips" role="tablist" aria-label="Линейки"></div>
+      <p class="count" id="count" aria-live="polite"></p>
+      <div id="list"></div>
+      <p class="empty" id="empty" hidden>Такого вкуса на полке нет.</p>
+    </section>
+
+    <section class="visit" id="visit">
+      <p class="eyebrow">Визит</p>
+      <h2>Красных Партизан, 469.</h2>
+      <p>Краснодар. Вейп-шоп «Дымная вишня».</p>
+      <a class="map" href="https://yandex.ru/maps/?text=%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D0%BE%D0%B4%D0%B0%D1%80%2C%20%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%9A%D1%80%D0%B0%D1%81%D0%BD%D1%8B%D1%85%20%D0%9F%D0%B0%D1%80%D1%82%D0%B8%D0%B7%D0%B0%D0%BD%2C%20469" target="_blank" rel="noopener">Открыть на карте</a>
+      <p class="fine">Никотиносодержащая продукция. 18+. Цены и остатки взяты из прайса магазина и могут измениться к визиту.</p>
+    </section>
+  </main>
+  <script src="menu.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
