@@ -18,12 +18,35 @@ function resizeSmoke() {
   ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
 }
 
+const pointer = { x: 0.72, y: 0.42 };
+const puffs = [];
+window.addEventListener("pointermove", (event) => {
+  pointer.x = event.clientX / window.innerWidth;
+  pointer.y = event.clientY / window.innerHeight;
+});
+
+function puffAt(x, y) {
+  for (let index = 0; index < 16; index += 1) {
+    puffs.push({
+      x,
+      y,
+      vx: (Math.random() - 0.5) * 2.2,
+      vy: -0.6 - Math.random() * 1.6,
+      r: 18 + Math.random() * 54,
+      life: 1,
+      rose: Math.random() > 0.45
+    });
+  }
+}
+
 function drawSmoke(time) {
   const w = window.innerWidth;
   const h = window.innerHeight;
   ctx.clearRect(0, 0, w, h);
   grains.forEach((grain) => {
-    const x = (grain.x + Math.sin(time * 0.00015 + grain.phase) * 0.06) * w;
+    const drift = Math.sin(time * 0.00015 + grain.phase) * 0.06;
+    const pull = pointer.x - grain.x;
+    const x = (grain.x + drift + pull * 0.08) * w;
     const y = ((grain.y - ((time * grain.speed) / 1000) % 1) + 1) % 1 * (h + grain.r * 2) - grain.r;
     const gradient = ctx.createRadialGradient(x, y, 0, x, y, grain.r);
     const rose = grain.tint > 0.72;
@@ -35,6 +58,24 @@ function drawSmoke(time) {
     ctx.arc(x, y, grain.r, 0, Math.PI * 2);
     ctx.fill();
   });
+  for (let index = puffs.length - 1; index >= 0; index -= 1) {
+    const puff = puffs[index];
+    puff.x += puff.vx;
+    puff.y += puff.vy;
+    puff.life -= 0.012;
+    puff.r += 0.8;
+    if (puff.life <= 0) {
+      puffs.splice(index, 1);
+      continue;
+    }
+    const gradient = ctx.createRadialGradient(puff.x, puff.y, 0, puff.x, puff.y, puff.r);
+    gradient.addColorStop(0, puff.rose ? `rgba(226,59,90,${puff.life * 0.45})` : `rgba(246,220,226,${puff.life * 0.35})`);
+    gradient.addColorStop(1, "rgba(18,6,11,0)");
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(puff.x, puff.y, puff.r, 0, Math.PI * 2);
+    ctx.fill();
+  }
   if (!document.hidden) requestAnimationFrame(drawSmoke);
 }
 
@@ -194,3 +235,54 @@ const onScroll = () => header.classList.toggle("is-solid", window.scrollY > 24);
 document.addEventListener("scroll", onScroll, { passive: true });
 onScroll();
 render();
+
+const cherry = document.querySelector("#cherry");
+const cherryLine = document.querySelector("#cherry-line");
+const cherryLines = [
+  "Сок пошёл по стеблю.",
+  "Дым стал гуще.",
+  "На двери: 10:00–22:00.",
+  "Ищем вишню на полке."
+];
+let cherryStep = 0;
+
+function burstPetals(rect) {
+  for (let index = 0; index < 12; index += 1) {
+    const petal = document.createElement("i");
+    petal.className = "burst";
+    petal.style.left = `${rect.left + rect.width * 0.5}px`;
+    petal.style.top = `${rect.top + rect.height * 0.58}px`;
+    petal.style.setProperty("--dx", `${(Math.random() - 0.5) * 260}px`);
+    petal.style.setProperty("--dy", `${-30 - Math.random() * 200}px`);
+    document.body.append(petal);
+    petal.addEventListener("animationend", () => petal.remove());
+  }
+}
+
+cherry.addEventListener("animationend", (event) => {
+  if (event.animationName === "squash") cherry.classList.remove("is-burst");
+});
+cherry.addEventListener("click", () => {
+  cherry.classList.remove("is-burst");
+  void cherry.offsetWidth;
+  cherry.classList.add("is-burst");
+  const text = cherryLines[cherryStep % cherryLines.length];
+  cherryLine.hidden = false;
+  cherryLine.textContent = text;
+  cherryLine.classList.remove("is-on");
+  void cherryLine.offsetWidth;
+  cherryLine.classList.add("is-on");
+  const rect = cherry.getBoundingClientRect();
+  if (!motion) {
+    puffAt(rect.left + rect.width * 0.46, rect.top + rect.height * 0.55);
+    burstPetals(rect);
+  }
+  if (text.includes("полке")) {
+    queryInput.value = "вишня";
+    stockOnly = false;
+    stockButton.setAttribute("aria-pressed", "false");
+    render();
+    document.querySelector("#shelf").scrollIntoView({ behavior: motion ? "auto" : "smooth", block: "start" });
+  }
+  cherryStep += 1;
+});
